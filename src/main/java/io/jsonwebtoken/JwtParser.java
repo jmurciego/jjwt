@@ -455,4 +455,6 @@ public interface JwtParser {
      */
     Jws<Claims> parseClaimsJws(String claimsJws)
             throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException;
+    
+    JwtParser ignoreExpiry();
 }

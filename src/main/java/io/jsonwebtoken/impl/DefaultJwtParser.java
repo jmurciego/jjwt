@@ -74,6 +74,16 @@ public class DefaultJwtParser implements JwtParser {
     private Clock clock = DefaultClock.INSTANCE;
 
     private long allowedClockSkewMillis = 0;
+    
+    private boolean ignoreExpiry = false;
+    
+    @Override
+     public JwtParser ignoreExpiry() {
+         ignoreExpiry = true;
+ 
+         return this;
+     }
+ 
 
     @Override
     public JwtParser requireIssuedAt(Date issuedAt) {
@@ -368,7 +378,7 @@ public class DefaultJwtParser implements JwtParser {
             //https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-30#section-4.1.4
             //token MUST NOT be accepted on or after any specified exp time:
             Date exp = claims.getExpiration();
-            if (exp != null) {
+            if (exp != null && !ignoreExpiry) {
 
                 long maxTime = nowTime - this.allowedClockSkewMillis;
                 Date max = allowSkew ? new Date(maxTime) : now;
